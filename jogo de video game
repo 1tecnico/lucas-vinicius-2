@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mundo dos Jogos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #111;
+      color: #f0f0f0;
+    }
+    header {
+      background-color: #222;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      color: #00ff99;
+    }
+    nav {
+      text-align: center;
+      background-color: #333;
+      padding: 10px 0;
+    }
+    nav a {
+      color: #00ffcc;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    h2 {
+      color: #00ccff;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #222;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mundo dos Jogos</h1>
+    <p>Explore o universo dos videogames: do clássico ao moderno!</p>
+  </header>
+
+  <nav>
+    <a href="#classicos">Clássicos</a>
+    <a href="#atuais">Lançamentos</a>
+    <a href="#links">Links úteis</a>
+  </nav>
+
+  <main>
+    <section id="classicos">
+      <h2>🎮 Jogos Clássicos</h2>
+      <p>Os clássicos nunca morrem! Títulos como <strong>Super Mario Bros</strong>, <strong>Sonic the Hedgehog</strong>, <strong>Street Fighter II</strong> e <strong>Pac-Man</strong> marcaram gerações.</p>
+      <img src="https://upload.wikimedia.org/wikipedia/en/0/03/Super_Mario_Bros._box.png" alt="Super Mario Bros">
+    </section>
+
+    <section id="atuais">
+      <h2>🕹️ Jogos Atuais</h2>
+      <p>Com gráficos realistas e jogabilidade imersiva, jogos como <strong>The Legend of Zelda: Tears of the Kingdom</strong>, <strong>Elden Ring</strong> e <strong>God of War: Ragnarök</strong> representam a nova geração dos games.</p>
+      <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/The_Legend_of_Zelda_Tears_of_the_Kingdom_cover.jpg" alt="Zelda Tears of the Kingdom">
+    </section>
+
+    <section id="links">
+      <h2>🔗 Links Úteis</h2>
+      <ul>
+        <li><a href="https://store.steampowered.com" target="_blank">Steam (loja de jogos para PC)</a></li>
+        <li><a href="https://www.playstation.com" target="_blank">PlayStation</a></li>
+        <li><a href="https://www.xbox.com" target="_blank">Xbox</a></li>
+        <li><a href="https://www.nintendo.com" target="_blank">Nintendo</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Criado por [Seu Nome] | Hospedado no <a href="https://pages.github.com" target="_blank" style="color:#00ffcc;">GitHub Pages</a></p>
+  </footer>
+
+</body>
+</html>
