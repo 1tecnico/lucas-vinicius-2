@@ -59,6 +59,30 @@
             padding: 10px;
             margin-top: 20px;
         }
+
+        .calculadora {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 5px;
+            max-width: 300px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .calculadora input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .calculadora button {
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+            margin: 3px;
+        }
     </style>
 </head>
 <body>
@@ -104,15 +128,63 @@
                 <td>São Januário</td>
             </tr>
         </table>
+
+        <h2>Calculadora</h2>
+        <div class="calculadora">
+            <input type="text" id="display" disabled>
+            <br>
+            <button onclick="append('7')">7</button>
+            <button onclick="append('8')">8</button>
+            <button onclick="append('9')">9</button>
+            <button onclick="append('/')">/</button>
+            <br>
+            <button onclick="append('4')">4</button>
+            <button onclick="append('5')">5</button>
+            <button onclick="append('6')">6</button>
+            <button onclick="append('*')">*</button>
+            <br>
+            <button onclick="append('1')">1</button>
+            <button onclick="append('2')">2</button>
+            <button onclick="append('3')">3</button>
+            <button onclick="append('-')">-</button>
+            <br>
+            <button onclick="append('0')">0</button>
+            <button onclick="append('.')">.</button>
+            <button onclick="calculate()">=</button>
+            <button onclick="append('+')">+</button>
+            <br>
+            <button onclick="clearDisplay()" style="width: 190px;">Limpar</button>
+        </div>
     </section>
 
     <footer>
         <p>&copy; 2025 Jogos de Futebol - Todos os direitos reservados</p>
     </footer>
-</body> 
-    <p>
-        <a href="lucas.odt"dowload>
-        clique aqui para baixaR
+
+    <!-- Corrigido: tag <p> agora dentro de <body>, e 'download' corrigido -->
+    <p style="text-align: center; margin-bottom: 30px;">
+        <a href="lucas.odt" download>
+            Clique aqui para baixar
         </a>
-    </p> 
+    </p>
+
+    <script>
+        function append(valor) {
+            document.getElementById("display").value += valor;
+        }
+
+        function calculate() {
+            try {
+                document.getElementById("display").value = eval(document.getElementById("display").value);
+            } catch {
+                document.getElementById("display").value = "Erro";
+            }
+        }
+
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+    </script>
+</body>
 </html>
+
