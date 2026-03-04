@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎒 Minha Mochila de Matérias</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 25px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1 {
+    text-align: center;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #4e73df;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #f8f9fc;
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remover {
+    background-color: #e74a3b;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🎒 Minha Mochila</h1>
+
+    <div class="input-area">
+        <input type="text" id="materiaInput" placeholder="Digite sua matéria">
+        <button onclick="adicionarMateria()">Adicionar</button>
+    </div>
+
+    <ul id="lista"></ul>
+</div>
+
+<script>
+let materias = JSON.parse(localStorage.getItem("materias")) || [];
+
+function salvar() {
+    localStorage.setItem("materias", JSON.stringify(materias));
+}
+
+function renderizar() {
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    materias.forEach((materia, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            ${materia}
+            <button class="remover" onclick="removerMateria(${index})">Excluir</button>
+        `;
+        lista.appendChild(li);
+    });
+}
+
+function adicionarMateria() {
+    const input = document.getElementById("materiaInput");
+    const valor = input.value.trim();
+
+    if (valor !== "") {
+        materias.push(valor);
+        salvar();
+        renderizar();
+        input.value = "";
+    }
+}
+
+function removerMateria(index) {
+    materias.splice(index, 1);
+    salvar();
+    renderizar();
+}
+
+renderizar();
+</script>
+
+</body>
+</html>
