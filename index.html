@@ -9,7 +9,7 @@
   <style>
     :root {
       --bg: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-      --card: rgba(255, 255, 255, 0.96);
+      --card: rgba(255, 255, 255, 0.97);
       --text: #2c3e50;
       --accent: #4a69bd;
       --accent2: #6a89cc;
@@ -17,13 +17,12 @@
     }
     .dark {
       --bg: linear-gradient(135deg, #1e2a44 0%, #2c3e50 100%);
-      --card: rgba(30, 42, 68, 0.96);
+      --card: rgba(30, 42, 68, 0.97);
       --text: #e0e7ff;
       --accent: #5e9cff;
       --accent2: #7fb4ff;
       --success: #00d1a8;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body {
       background: var(--bg);
@@ -38,56 +37,55 @@
     .card {
       background: var(--card);
       width: 100%;
-      max-width: 520px;
-      padding: 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.3);
+      max-width: 540px;
+      padding: 32px;
+      border-radius: 28px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.35);
       transition: all 0.4s;
     }
-    .banners-container { margin-bottom: 24px; }
+    .banners-container { margin-bottom: 28px; }
     .banner {
       width: 100%;
-      border-radius: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      transition: transform 0.3s;
+      border-radius: 22px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .banner:hover { transform: scale(1.03); }
-    
+    .banner:hover { transform: scale(1.04); }
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2.35rem;
       font-weight: 700;
       color: var(--accent);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .toggle-dark {
       background: none;
       border: none;
-      font-size: 1.6rem;
+      font-size: 1.75rem;
       cursor: pointer;
       color: var(--accent);
       transition: transform 0.3s;
     }
-    .toggle-dark:hover { transform: rotate(20deg); }
+    .toggle-dark:hover { transform: rotate(25deg); }
 
     .input-group {
-      display: flex;
+      display: grid;
+      grid-template-columns: 2.8fr 1.2fr 120px;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     input {
-      flex: 1;
-      padding: 14px 18px;
+      padding: 15px 18px;
       border-radius: 16px;
       border: 2px solid #dfe6e9;
       font-size: 1.05rem;
@@ -97,10 +95,12 @@
     input:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(74, 105, 189, 0.2);
+      box-shadow: 0 0 0 4px rgba(74, 105, 189, 0.25);
     }
+    #horasInput { text-align: center; font-weight: 600; }
+
     button {
-      padding: 14px 24px;
+      padding: 15px 24px;
       border: none;
       border-radius: 16px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
@@ -109,63 +109,70 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-    button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(74,105,189,0.3); }
+    button:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(74,105,189,0.35); }
 
     .search-group {
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .search-group input {
       width: 100%;
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.75);
+      padding: 14px 20px;
     }
-    .dark .search-group input { background: rgba(44,62,80,0.7); }
+    .dark .search-group input { background: rgba(44,62,80,0.75); }
 
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.08rem;
+      font-weight: 600;
+      margin: 22px 0 10px;
+    }
     .progress-container {
-      margin: 20px 0;
       background: #f1f3f5;
       border-radius: 999px;
-      height: 12px;
+      height: 14px;
       overflow: hidden;
+      margin-bottom: 24px;
     }
     .dark .progress-container { background: #34495e; }
     .progress-bar {
       height: 100%;
       background: linear-gradient(90deg, var(--success), #00d1a8);
       width: 0%;
-      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
       border-radius: 999px;
     }
 
     ul {
       list-style: none;
-      max-height: 380px;
+      max-height: 390px;
       overflow-y: auto;
       padding-right: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     ul::-webkit-scrollbar { width: 8px; }
     ul::-webkit-scrollbar-thumb {
       background: var(--accent);
       border-radius: 10px;
     }
-
     li {
       background: #f8f9fa;
-      padding: 14px 18px;
-      border-radius: 16px;
-      margin-bottom: 10px;
+      padding: 16px 20px;
+      border-radius: 18px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      transition: all 0.3s;
+      gap: 14px;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       border: 1px solid #e9ecef;
     }
     .dark li { background: #34495e; border-color: #4a5f8a; }
-    li:hover { transform: translateX(8px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+    li:hover { transform: translateX(10px) scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 
     .check {
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       border: 3px solid #bdc3c7;
       border-radius: 50%;
       display: flex;
@@ -173,68 +180,73 @@
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s;
-      font-size: 14px;
+      font-size: 16px;
     }
     li.estudada .check {
       background: var(--success);
       border-color: var(--success);
       color: white;
+      transform: scale(1.15);
     }
     .texto {
       flex: 1;
       font-weight: 500;
-      font-size: 1.05rem;
-      transition: all 0.3s;
+      font-size: 1.08rem;
+    }
+    .horas-label {
+      font-size: 0.95rem;
+      color: var(--accent);
+      font-weight: 600;
+      background: rgba(74,105,189,0.1);
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
     }
     li.estudada .texto {
       text-decoration: line-through;
-      opacity: 0.7;
+      opacity: 0.75;
       color: var(--success);
     }
+    li.estudada .horas-label { opacity: 0.6; }
 
     .actions {
       display: flex;
       gap: 6px;
     }
     .actions button {
-      padding: 6px 10px;
-      font-size: 1rem;
-      min-width: 34px;
+      padding: 7px 11px;
+      font-size: 1.1rem;
+      min-width: 36px;
+      background: #f1f3f5;
+      color: #2c3e50;
     }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin: 20px 0 12px;
-    }
+    .dark .actions button { background: #2c3e50; color: #e0e7ff; }
 
     .extra-btns {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
     .extra-btns button {
       flex: 1;
-      font-size: 0.95rem;
-      padding: 12px;
+      font-size: 0.98rem;
+      padding: 13px;
     }
 
     .motivacao {
       text-align: center;
-      margin-top: 20px;
-      font-size: 1.1rem;
-      font-weight: 600;
+      margin-top: 24px;
+      font-size: 1.15rem;
+      font-weight: 700;
       color: var(--success);
       opacity: 0;
-      transition: opacity 0.6s;
+      transition: all 0.6s;
     }
-    .motivacao.show { opacity: 1; }
+    .motivacao.show { opacity: 1; transform: scale(1.05); }
 
     .footer {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 32px;
       font-size: 0.9rem;
       color: #7f8c8d;
     }
@@ -245,14 +257,11 @@
   </style>
 </head>
 <body>
-
 <div class="card">
-  <!-- Banners Dan Da Dan -->
+  <!-- BANNER ÚNICO: OKARUN ESTUDANDO (somente ele!) -->
   <div class="banners-container">
-    <img src="https://4kwallpapers.com/images/wallpapers/momo-dandadan-3840x2160-19451.jpg" 
-         alt="Dan Da Dan - Momo e Okarun" class="banner">
-    <img src="https://www.anitrendz.com/_next/image?url=https%3A%2F%2Fi0.wp.com%2Fanitrendz.net%2Fnews%2Fwp-content%2Fuploads%2F2024%2F10%2FDAN-DA-DAN-Official-Key-Art-2-%25E2%2580%2593-16x9-1.png%3Ffit%3D3840%252C2160%26ssl%3D1&w=1920&q=75" 
-         alt="Dan Da Dan - Key Visual" class="banner">
+    <img src="https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/09/dandadan-pv2.jpg?w=1600&h=900&fit=crop"
+         alt="Okarun estudando revista de UFO - Dan Da Dan" class="banner">
   </div>
 
   <div class="header">
@@ -260,9 +269,10 @@
     <button id="darkToggle" class="toggle-dark" title="Alternar tema"><i class="fas fa-moon"></i></button>
   </div>
 
-  <!-- Adicionar -->
+  <!-- ADICIONAR MATÉRIA + QUANTIDADE -->
   <div class="input-group">
     <input type="text" id="materiaInput" placeholder="Nova matéria (ex: Física)" autocomplete="off">
+    <input type="number" id="horasInput" placeholder="Horas" min="1" value="2" step="0.5">
     <button id="addBtn">Adicionar</button>
   </div>
 
@@ -271,10 +281,10 @@
     <input type="text" id="searchInput" placeholder="🔎 Buscar matéria...">
   </div>
 
-  <!-- Progresso -->
+  <!-- Stats + Progresso -->
   <div class="stats">
-    <span>Total: <strong id="total">0</strong></span>
-    <span>Estudadas: <strong id="estudadas">0</strong></span>
+    <span>Total horas: <strong id="total">0h</strong></span>
+    <span>Estudadas: <strong id="estudadas">0h</strong></span>
   </div>
   <div class="progress-container">
     <div id="progressBar" class="progress-bar"></div>
@@ -293,7 +303,8 @@
   <div id="motivacao" class="motivacao">🎉 PARABÉNS! Você zerou a mochila! Continue assim, Okarun! 🔥</div>
 
   <div class="footer">
-    Feito com ❤️ para estudos • <a href="https://github.com/SEU-USUARIO/mochila-dandadan" target="_blank">Hospede no GitHub Pages</a>
+    Feito com ❤️ para estudos • 
+    <a href="https://github.com/SEU-USUARIO/mochila-dandadan" target="_blank">Hospede grátis no GitHub Pages</a>
   </div>
 </div>
 
@@ -303,6 +314,7 @@ let materias = JSON.parse(localStorage.getItem("mochilaDanDaDan")) || [];
 
 // ==================== ELEMENTOS ====================
 const input = document.getElementById("materiaInput");
+const horasInput = document.getElementById("horasInput");
 const lista = document.getElementById("lista");
 const totalEl = document.getElementById("total");
 const estudadasEl = document.getElementById("estudadas");
@@ -322,7 +334,6 @@ function salvar() {
 // ==================== RENDERIZAR ====================
 function renderizar(filtro = "") {
   lista.innerHTML = "";
-
   const filtradas = materias.filter(m => 
     m.nome.toLowerCase().includes(filtro.toLowerCase())
   );
@@ -342,33 +353,32 @@ function renderizar(filtro = "") {
       atualizarProgresso();
     });
 
-    // Texto
+    // Texto + Horas
     const span = document.createElement("span");
     span.className = "texto";
-    span.textContent = materia.nome;
+    span.innerHTML = `${materia.nome} <span class="horas-label">${materia.horas}h</span>`;
 
     // Ações
     const actions = document.createElement("div");
     actions.className = "actions";
-
     const up = document.createElement("button");
     up.innerHTML = "↑";
     up.addEventListener("click", () => moverItem(idxGlobal, -1));
-
     const down = document.createElement("button");
     down.innerHTML = "↓";
     down.addEventListener("click", () => moverItem(idxGlobal, 1));
-
     const del = document.createElement("button");
     del.innerHTML = "🗑";
     del.style.background = "#ff7675";
+    del.style.color = "white";
     del.addEventListener("click", () => {
-      materias.splice(idxGlobal, 1);
-      salvar();
-      renderizar(searchInput.value);
-      atualizarProgresso();
+      if (confirm("Excluir esta matéria?")) {
+        materias.splice(idxGlobal, 1);
+        salvar();
+        renderizar(searchInput.value);
+        atualizarProgresso();
+      }
     });
-
     actions.append(up, down, del);
 
     li.append(check, span, actions);
@@ -378,19 +388,24 @@ function renderizar(filtro = "") {
   atualizarProgresso();
 }
 
-// ==================== ATUALIZAR PROGRESSO ====================
+// ==================== ATUALIZAR PROGRESSO (AGORA COM HORAS!) ====================
 function atualizarProgresso() {
-  const total = materias.length;
-  const estudadas = materias.filter(m => m.estudada).length;
+  let totalHoras = 0;
+  let estudadasHoras = 0;
 
-  totalEl.textContent = total;
-  estudadasEl.textContent = estudadas;
+  materias.forEach(m => {
+    totalHoras += m.horas || 0;
+    if (m.estudada) estudadasHoras += m.horas || 0;
+  });
 
-  const percent = total === 0 ? 0 : (estudadas / total) * 100;
+  totalEl.textContent = totalHoras.toFixed(1) + "h";
+  estudadasEl.textContent = estudadasHoras.toFixed(1) + "h";
+
+  const percent = totalHoras === 0 ? 0 : (estudadasHoras / totalHoras) * 100;
   progressBar.style.width = percent + "%";
 
-  // Motivação
-  if (total > 0 && estudadas === total) {
+  // Motivação + Confetti
+  if (totalHoras > 0 && estudadasHoras >= totalHoras - 0.01) {
     motivacao.classList.add("show");
     lancarConfetti();
   } else {
@@ -400,13 +415,18 @@ function atualizarProgresso() {
 
 // ==================== ADICIONAR ====================
 function adicionarMateria() {
-  const valor = input.value.trim();
-  if (!valor) return;
+  const nome = input.value.trim();
+  let horas = parseFloat(horasInput.value);
+  if (!nome || isNaN(horas) || horas <= 0) {
+    alert("Preencha a matéria e uma quantidade válida de horas! 📚");
+    return;
+  }
 
-  materias.push({ nome: valor, estudada: false });
+  materias.push({ nome: nome, horas: horas, estudada: false });
   salvar();
   renderizar(searchInput.value);
   input.value = "";
+  horasInput.value = "2";
   input.focus();
 }
 
@@ -414,7 +434,6 @@ function adicionarMateria() {
 function moverItem(index, direcao) {
   const novoIndex = index + direcao;
   if (novoIndex < 0 || novoIndex >= materias.length) return;
-
   [materias[index], materias[novoIndex]] = [materias[novoIndex], materias[index]];
   salvar();
   renderizar(searchInput.value);
@@ -423,45 +442,37 @@ function moverItem(index, direcao) {
 // ==================== MATÉRIA ALEATÓRIA ====================
 function materiaAleatoria() {
   if (materias.length === 0) return alert("Adicione matérias primeiro! 📚");
-  
   const randomIndex = Math.floor(Math.random() * materias.length);
   const item = lista.children[randomIndex];
-  
+
   if (item) {
-    item.style.transition = "all 0.6s";
-    item.style.transform = "scale(1.08)";
+    item.style.transition = "all 0.7s";
+    item.style.transform = "scale(1.12) rotate(2deg)";
     item.style.background = "#ffeaa7";
-    
     setTimeout(() => {
       item.style.transform = "scale(1)";
       item.style.background = "";
-    }, 1200);
-    
-    alert(`🎲 Matéria do dia: ${materias[randomIndex].nome}\n\nVá estudar agora, guerreiro!`);
+    }, 1400);
+    alert(`🎲 Matéria do dia: ${materias[randomIndex].nome}\n\n${materias[randomIndex].horas}h de estudo!\nVá estudar agora, guerreiro! 👽`);
   }
 }
 
 // ==================== LIMPAR TUDO ====================
 function limparTudo() {
-  if (confirm("Tem certeza que quer zerar a mochila inteira?")) {
+  if (confirm("Tem certeza que quer zerar toda a mochila?")) {
     materias = [];
     salvar();
     renderizar();
   }
 }
 
-// ==================== CONFETTI (puro JS) ====================
+// ==================== CONFETTI ====================
 function lancarConfetti() {
   const canvas = document.createElement("canvas");
-  canvas.style.position = "fixed";
-  canvas.style.top = "0";
-  canvas.style.left = "0";
-  canvas.style.width = "100%";
-  canvas.style.height = "100%";
-  canvas.style.pointerEvents = "none";
-  canvas.style.zIndex = "9999";
+  canvas.style.position = "fixed"; canvas.style.top = "0"; canvas.style.left = "0";
+  canvas.style.width = "100%"; canvas.style.height = "100%";
+  canvas.style.pointerEvents = "none"; canvas.style.zIndex = "9999";
   document.body.appendChild(canvas);
-
   const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -473,16 +484,16 @@ function lancarConfetti() {
     constructor() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height - canvas.height;
-      this.size = Math.random() * 10 + 6;
-      this.speed = Math.random() * 6 + 4;
+      this.size = Math.random() * 11 + 7;
+      this.speed = Math.random() * 7 + 5;
       this.angle = Math.random() * Math.PI * 2;
       this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.rotation = Math.random() * 0.05;
+      this.rotation = Math.random() * 0.08;
     }
     update() {
       this.y += this.speed;
       this.angle += this.rotation;
-      this.speed *= 0.99;
+      this.speed *= 0.985;
     }
     draw() {
       ctx.save();
@@ -494,7 +505,7 @@ function lancarConfetti() {
     }
   }
 
-  for (let i = 0; i < 180; i++) particles.push(new Particle());
+  for (let i = 0; i < 220; i++) particles.push(new Particle());
 
   let frame = 0;
   function animate() {
@@ -505,7 +516,7 @@ function lancarConfetti() {
       if (p.y > canvas.height) particles.splice(i, 1);
     });
     frame++;
-    if (frame < 120 && particles.length > 0) requestAnimationFrame(animate);
+    if (frame < 140 && particles.length > 0) requestAnimationFrame(animate);
     else document.body.removeChild(canvas);
   }
   animate();
@@ -514,9 +525,8 @@ function lancarConfetti() {
 // ==================== EVENTOS ====================
 addBtn.addEventListener("click", adicionarMateria);
 input.addEventListener("keypress", e => { if (e.key === "Enter") adicionarMateria(); });
-
+horasInput.addEventListener("keypress", e => { if (e.key === "Enter") adicionarMateria(); });
 searchInput.addEventListener("input", () => renderizar(searchInput.value));
-
 randomBtn.addEventListener("click", materiaAleatoria);
 clearBtn.addEventListener("click", limparTudo);
 
@@ -529,7 +539,7 @@ darkToggle.addEventListener("click", () => {
   localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 });
 
-// Carregar tema salvo
+// Carregar tema
 if (localStorage.getItem("darkMode") === "true") {
   document.body.classList.add("dark");
   darkToggle.querySelector("i").classList.replace("fa-moon", "fa-sun");
@@ -538,6 +548,5 @@ if (localStorage.getItem("darkMode") === "true") {
 // ==================== INICIALIZAÇÃO ====================
 renderizar();
 </script>
-
 </body>
 </html>
