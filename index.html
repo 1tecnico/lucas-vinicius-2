@@ -36,9 +36,12 @@
       width: 100%;
       height: auto;
       border-radius: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 16px; /* Espaçamento menor entre banners */
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       display: block;
+    }
+    .banners-container {
+      margin-bottom: 24px;
     }
     h1 {
       text-align: center;
@@ -161,19 +164,29 @@
     @media (max-width: 500px) {
       .card { padding: 24px; }
       h1 { font-size: 1.8rem; }
-      .banner { margin-bottom: 20px; }
+      .banner { margin-bottom: 12px; }
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <!-- Banner com imagem do Dan Da Dan -->
-  <img 
-    src="https://images.alphacoders.com/138/1383999.png" 
-    alt="Dan Da Dan Anime Poster" 
-    class="banner"
-  >
+  <!-- Galeria de banners com fotos do Dan Da Dan -->
+  <div class="banners-container">
+    <!-- Imagem 1: Poster dinâmico com Momo e Okarun -->
+    <img 
+      src="https://4kwallpapers.com/images/wallpapers/momo-dandadan-3840x2160-19451.jpg" 
+      alt="Dan Da Dan - Momo e Okarun em ação" 
+      class="banner"
+    >
+    
+    <!-- Imagem 2: Key visual oficial com o grupo todo (mais completa) -->
+    <img 
+      src="https://www.anitrendz.com/_next/image?url=https%3A%2F%2Fi0.wp.com%2Fanitrendz.net%2Fnews%2Fwp-content%2Fuploads%2F2024%2F10%2FDAN-DA-DAN-Official-Key-Art-2-%25E2%2580%2593-16x9-1.png%3Ffit%3D3840%252C2160%26ssl%3D1&w=1920&q=75" 
+      alt="Dan Da Dan - Key Visual Oficial com personagens" 
+      class="banner"
+    >
+  </div>
 
   <h1><i class="fas fa-book-open"></i> Minha Mochila</h1>
 
@@ -190,6 +203,7 @@
 </div>
 
 <script>
+// O script continua exatamente igual ao anterior
 document.addEventListener("DOMContentLoaded", function() {
   let materias = JSON.parse(localStorage.getItem("materias")) || [];
   const input = document.getElementById("materiaInput");
