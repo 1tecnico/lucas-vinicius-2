@@ -1,137 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minha Mochila de Estudos</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --accent: #00d4ff;
+      --text: #e0e0ff;
+      --danger: #ff4d6d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 1.8rem;
+      font-size: 2.1rem;
+      color: var(--accent);
+    }
+
+    .add-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 16px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #00eaff;
+      transform: translateY(-1px);
+    }
+
+    .mochila {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .materia {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #2a2a4a;
+      transition: all 0.18s;
+      position: relative;
+    }
+
+    .materia:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 212, 255, 0.12);
+      border-color: var(--accent);
+    }
+
+    .nome {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .nome:hover {
+      background: rgba(0, 212, 255, 0.12);
+    }
+
+    .anotacao {
+      font-size: 0.95rem;
+      color: #c0c0e0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 1.2em;
+    }
+
+    .anotacao:empty::before {
+      content: "Clique no nome para adicionar anotação...";
+      color: #555;
+      font-style: italic;
+    }
+
+    .remover {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      color: var(--danger);
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.4rem;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    .remover:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    @media (max-width: 500px) {
+      .add-area { flex-direction: column; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎒 Minha Mochila</h1>
+
+  <div class="add-area">
+    <input type="text" id="novaMateria" placeholder="Digite o nome da matéria..." autocomplete="off"/>
+    <button onclick="adicionarMateria()">Adicionar</button>
+  </div>
+
+  <div class="mochila" id="mochila"></div>
+</div>
+
 <script>
-    // 1. Declarar todas as variáveis no topo
-    let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
-    let notes     = JSON.parse(localStorage.getItem("notes")) || {};
-    let currentIndex = null;
+const mochilaEl = document.getElementById('mochila');
+const inputEl   = document.getElementById('novaMateria');
 
-    // 2. Funções (podem vir depois das declarações)
-    function save() {
-        localStorage.setItem("inventory", JSON.stringify(inventory));
-        localStorage.setItem("notes", JSON.stringify(notes));
+let materias = JSON.parse(localStorage.getItem('mochila-materias') || '[]');
+
+function salvar() {
+  localStorage.setItem('mochila-materias', JSON.stringify(materias));
+  renderizar();
+}
+
+function renderizar() {
+  mochilaEl.innerHTML = '';
+
+  materias.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'materia';
+
+    // Nome editável
+    const nome = document.createElement('div');
+    nome.className = 'nome';
+    nome.textContent = item.nome;
+    nome.onclick = () => editarNome(i, nome);
+
+    // Anotação editável
+    const anot = document.createElement('div');
+    anot.className = 'anotacao';
+    anot.textContent = item.anotacao || '';
+    anot.onclick = () => editarAnotacao(i, anot);
+
+    // Botão remover
+    const btnRem = document.createElement('span');
+    btnRem.className = 'remover';
+    btnRem.textContent = '×';
+    btnRem.onclick = (e) => {
+      e.stopPropagation();
+      if (confirm(`Remover ${item.nome}?`)) {
+        materias.splice(i, 1);
+        salvar();
+      }
+    };
+
+    div.append(btnRem, nome, anot);
+    mochilaEl.appendChild(div);
+  });
+}
+
+function adicionarMateria() {
+  const texto = inputEl.value.trim();
+  if (!texto) return;
+
+  materias.push({ nome: texto, anotacao: '' });
+  inputEl.value = '';
+  salvar();
+}
+
+// Pressionar Enter também adiciona
+inputEl.onkeydown = e => {
+  if (e.key === 'Enter') {
+    adicionarMateria();
+  }
+};
+
+function editarNome(idx, elemento) {
+  const original = materias[idx].nome;
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.value = original;
+  inp.style.width = '100%';
+  inp.style.background = 'rgba(0,212,255,0.1)';
+  inp.style.border = '1px solid var(--accent)';
+  inp.style.color = 'white';
+  inp.style.padding = '4px 8px';
+  inp.style.borderRadius = '6px';
+
+  elemento.replaceWith(inp);
+  inp.focus();
+  inp.select();
+
+  const salvarNome = () => {
+    const novo = inp.value.trim() || original;
+    materias[idx].nome = novo;
+    salvar();
+  };
+
+  inp.onblur = salvarNome;
+  inp.onkeydown = e => {
+    if (e.key === 'Enter') { e.preventDefault(); salvarNome(); }
+    if (e.key === 'Escape') { salvarNome(); }
+  };
+}
+
+function editarAnotacao(idx, elemento) {
+  const original = materias[idx].anotacao || '';
+  const inp = document.createElement('textarea');
+  inp.value = original;
+  inp.style.width = '100%';
+  inp.style.minHeight = '80px';
+  inp.style.background = 'rgba(0,212,255,0.08)';
+  inp.style.border = '1px solid #444';
+  inp.style.color = 'white';
+  inp.style.padding = '8px';
+  inp.style.borderRadius = '6px';
+  inp.style.resize = 'vertical';
+  inp.style.fontFamily = 'inherit';
+  inp.style.fontSize = '0.95rem';
+
+  elemento.replaceWith(inp);
+  inp.focus();
+
+  const salvarAnot = () => {
+    materias[idx].anotacao = inp.value.trim();
+    salvar();
+  };
+
+  inp.onblur = salvarAnot;
+  inp.onkeydown = e => {
+    if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault();
+      salvarAnot();
     }
+  };
+}
 
-    function render() {
-        const inv = document.getElementById("inventory");
-        inv.innerHTML = "";
-
-        inventory.forEach((item, index) => {
-            const div = document.createElement("div");
-            div.className = "item";
-
-            const nameDiv = document.createElement("div");
-            nameDiv.className = "item-name";
-            nameDiv.textContent = item;
-            nameDiv.onclick = (e) => {
-                e.stopPropagation();
-                startEditingName(index, nameDiv);
-            };
-
-            div.innerHTML = `
-                <span class="remove" onclick="event.stopPropagation(); removeItem(${index})">×</span>
-            `;
-            div.appendChild(nameDiv);
-
-            if (notes[index] && notes[index].trim()) {
-                const noteIcon = document.createElement("span");
-                noteIcon.className = "has-note";
-                noteIcon.textContent = "📝";
-                div.appendChild(noteIcon);
-            }
-
-            div.addEventListener("dblclick", () => openNote(index));
-
-            inv.appendChild(div);
-        });
-    }
-
-    function startEditingName(index, element) {
-        if (element.classList.contains("editing")) return;
-
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = inventory[index];
-        
-        element.classList.add("editing");
-        element.innerHTML = "";
-        element.appendChild(input);
-        input.focus();
-        input.select();
-
-        const finishEdit = () => {
-            const newValue = input.value.trim();
-            if (newValue && newValue !== inventory[index]) {
-                inventory[index] = newValue;
-                save();
-            }
-            element.classList.remove("editing");
-            element.textContent = inventory[index] || "(sem nome)";
-        };
-
-        input.onblur = finishEdit;
-        input.onkeydown = e => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                finishEdit();
-            }
-            if (e.key === "Escape") {
-                finishEdit();
-            }
-        };
-    }
-
-    function addItem() {
-        const input = document.getElementById("itemInput");
-        const value = input.value.trim();
-        if (!value) return;
-        inventory.push(value);
-        input.value = "";
-        save();
-        render();
-    }
-
-    function removeItem(i) {
-        if (!confirm(`Remover "${inventory[i]}"?`)) return;
-        
-        inventory.splice(i, 1);
-        
-        const newNotes = {};
-        Object.keys(notes).forEach(k => {
-            const idx = Number(k);
-            if (idx < i) newNotes[idx] = notes[k];
-            if (idx > i) newNotes[idx - 1] = notes[k];
-        });
-        notes = newNotes;
-        
-        save();
-        render();
-    }
-
-    // ─── Anotações (opcional) ───
-    function openNote(index) {
-        currentIndex = index;
-        document.getElementById("currentItemName").textContent = inventory[index];
-        document.getElementById("noteInput").value = notes[index] || "";
-        document.getElementById("noteArea").classList.remove("hidden");
-        document.getElementById("noteInput").focus();
-    }
-
-    function saveNote() {
-        if (currentIndex === null) return;
-        const val = document.getElementById("noteInput").value.trim();
-        if (val) {
-            notes[currentIndex] = val;
-        } else {
-            delete notes[currentIndex];
-        }
-        save();
-        render();
-    }
-
-    document.getElementById("noteInput").addEventListener("blur", saveNote);
-    document.getElementById("noteInput").addEventListener("keydown", e => {
-        if (e.ctrlKey && e.key === "Enter") saveNote();
-    });
-
-    // 3. Inicializar a interface
-    render();
+// Primeira renderização
+renderizar();
 </script>
+</body>
+</html>
