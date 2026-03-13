@@ -1,235 +1,137 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Mochila Interativa com Anotações</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a, #333);
-            color: white;
-            text-align: center;
-            padding: 40px;
-            min-height: 100vh;
-        }
-        h1 { margin-bottom: 25px; }
-        input, textarea {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            width: 260px;
-            font-size: 16px;
-        }
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            background: #00c853;
-            color: white;
-            cursor: pointer;
-            margin-left: 8px;
-            transition: 0.3s;
-            font-size: 16px;
-        }
-        button:hover { background: #00e676; }
-        
-        .inventory {
-            margin-top: 40px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 140px);
-            gap: 18px;
-            justify-content: center;
-        }
-        
-        .item {
-            background: #2c2c2c;
-            padding: 16px 10px;
-            border-radius: 12px;
-            position: relative;
-            transition: all 0.25s;
-            cursor: pointer;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            word-break: break-word;
-        }
-        
-        .item:hover {
-            transform: scale(1.08);
-            background: #3a3a3a;
-            box-shadow: 0 0 15px rgba(0,200,83,0.3);
-        }
-        
-        .remove {
-            position: absolute;
-            top: 6px;
-            right: 10px;
-            cursor: pointer;
-            color: #ff5252;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .has-note {
-            position: absolute;
-            bottom: 6px;
-            right: 10px;
-            font-size: 18px;
-            color: #00e676;
-        }
-        
-        .note-area {
-            margin-top: 30px;
-            text-align: left;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .note-area.hidden { display: none; }
-        
-        textarea {
-            width: 100%;
-            height: 140px;
-            resize: vertical;
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 12px;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-    </style>
-</head>
-<body>
+<script>
+    // 1. Declarar todas as variáveis no topo
+    let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+    let notes     = JSON.parse(localStorage.getItem("notes")) || {};
+    let currentIndex = null;
 
-    <h1>🎒 Minha Mochila de Estudos</h1>
+    // 2. Funções (podem vir depois das declarações)
+    function save() {
+        localStorage.setItem("inventory", JSON.stringify(inventory));
+        localStorage.setItem("notes", JSON.stringify(notes));
+    }
 
-    <input type="text" id="itemInput" placeholder="Digite o nome da matéria">
-    <button onclick="addItem()">Adicionar</button>
+    function render() {
+        const inv = document.getElementById("inventory");
+        inv.innerHTML = "";
 
-    <div id="inventory" class="inventory"></div>
+        inventory.forEach((item, index) => {
+            const div = document.createElement("div");
+            div.className = "item";
 
-    <div id="noteArea" class="note-area hidden">
-        <h3>Anotações para: <span id="currentItemName"></span></h3>
-        <textarea id="noteInput" placeholder="Escreva suas anotações, resumo, tarefas..."></textarea>
-    </div>
+            const nameDiv = document.createElement("div");
+            nameDiv.className = "item-name";
+            nameDiv.textContent = item;
+            nameDiv.onclick = (e) => {
+                e.stopPropagation();
+                startEditingName(index, nameDiv);
+            };
 
-    <script>
-        let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
-        let notes = JSON.parse(localStorage.getItem("notes")) || {};
-        let currentIndex = null;
+            div.innerHTML = `
+                <span class="remove" onclick="event.stopPropagation(); removeItem(${index})">×</span>
+            `;
+            div.appendChild(nameDiv);
 
-        function save() {
-            localStorage.setItem("inventory", JSON.stringify(inventory));
-            localStorage.setItem("notes", JSON.stringify(notes));
-        }
-
-        function render() {
-            const inv = document.getElementById("inventory");
-            inv.innerHTML = "";
-
-            inventory.forEach((item, index) => {
-                const div = document.createElement("div");
-                div.className = "item";
-                div.onclick = () => openNote(index);
-
-                let html = `
-                    <span class="remove" onclick="event.stopPropagation(); removeItem(${index})">×</span>
-                    <strong>${item}</strong>
-                `;
-
-                if (notes[index] && notes[index].trim() !== "") {
-                    html += '<span class="has-note">📝</span>';
-                }
-
-                div.innerHTML = html;
-                inv.appendChild(div);
-            });
-
-            // Fecha área de nota se o item não existir mais
-            if (currentIndex !== null && !inventory[currentIndex]) {
-                closeNote();
+            if (notes[index] && notes[index].trim()) {
+                const noteIcon = document.createElement("span");
+                noteIcon.className = "has-note";
+                noteIcon.textContent = "📝";
+                div.appendChild(noteIcon);
             }
-        }
 
-        function addItem() {
-            const input = document.getElementById("itemInput");
-            const value = input.value.trim();
-            if (value === "") return;
+            div.addEventListener("dblclick", () => openNote(index));
 
-            inventory.push(value);
-            input.value = "";
-            save();
-            render();
-        }
-
-        function removeItem(i) {
-            if (confirm(`Remover "${inventory[i]}"?`)) {
-                inventory.splice(i, 1);
-                
-                // Reorganiza as notas (diminui índices maiores que o removido)
-                const newNotes = {};
-                Object.keys(notes).forEach(key => {
-                    const k = Number(key);
-                    if (k < i) newNotes[k] = notes[k];
-                    if (k > i) newNotes[k-1] = notes[k];
-                });
-                notes = newNotes;
-
-                if (currentIndex === i) closeNote();
-                else if (currentIndex > i) currentIndex--;
-
-                save();
-                render();
-            }
-            event.stopPropagation();
-        }
-
-        function openNote(index) {
-            currentIndex = index;
-            const name = inventory[index];
-            document.getElementById("currentItemName").textContent = name;
-            
-            const noteInput = document.getElementById("noteInput");
-            noteInput.value = notes[index] || "";
-            
-            document.getElementById("noteArea").classList.remove("hidden");
-            noteInput.focus();
-        }
-
-        function saveNote() {
-            if (currentIndex === null) return;
-            const value = document.getElementById("noteInput").value.trim();
-            if (value === "") {
-                delete notes[currentIndex];
-            } else {
-                notes[currentIndex] = value;
-            }
-            save();
-            render(); // atualiza o ícone de nota
-        }
-
-        function closeNote() {
-            currentIndex = null;
-            document.getElementById("noteArea").classList.add("hidden");
-        }
-
-        // Salva automaticamente ao sair do textarea
-        document.getElementById("noteInput").addEventListener("blur", saveNote);
-
-        // Também salva ao pressionar Ctrl + Enter
-        document.getElementById("noteInput").addEventListener("keydown", e => {
-            if (e.ctrlKey && e.key === "Enter") {
-                saveNote();
-            }
+            inv.appendChild(div);
         });
+    }
 
-        // Carrega na inicialização
+    function startEditingName(index, element) {
+        if (element.classList.contains("editing")) return;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = inventory[index];
+        
+        element.classList.add("editing");
+        element.innerHTML = "";
+        element.appendChild(input);
+        input.focus();
+        input.select();
+
+        const finishEdit = () => {
+            const newValue = input.value.trim();
+            if (newValue && newValue !== inventory[index]) {
+                inventory[index] = newValue;
+                save();
+            }
+            element.classList.remove("editing");
+            element.textContent = inventory[index] || "(sem nome)";
+        };
+
+        input.onblur = finishEdit;
+        input.onkeydown = e => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                finishEdit();
+            }
+            if (e.key === "Escape") {
+                finishEdit();
+            }
+        };
+    }
+
+    function addItem() {
+        const input = document.getElementById("itemInput");
+        const value = input.value.trim();
+        if (!value) return;
+        inventory.push(value);
+        input.value = "";
+        save();
         render();
-    </script>
+    }
 
-</body>
-</html>
+    function removeItem(i) {
+        if (!confirm(`Remover "${inventory[i]}"?`)) return;
+        
+        inventory.splice(i, 1);
+        
+        const newNotes = {};
+        Object.keys(notes).forEach(k => {
+            const idx = Number(k);
+            if (idx < i) newNotes[idx] = notes[k];
+            if (idx > i) newNotes[idx - 1] = notes[k];
+        });
+        notes = newNotes;
+        
+        save();
+        render();
+    }
+
+    // ─── Anotações (opcional) ───
+    function openNote(index) {
+        currentIndex = index;
+        document.getElementById("currentItemName").textContent = inventory[index];
+        document.getElementById("noteInput").value = notes[index] || "";
+        document.getElementById("noteArea").classList.remove("hidden");
+        document.getElementById("noteInput").focus();
+    }
+
+    function saveNote() {
+        if (currentIndex === null) return;
+        const val = document.getElementById("noteInput").value.trim();
+        if (val) {
+            notes[currentIndex] = val;
+        } else {
+            delete notes[currentIndex];
+        }
+        save();
+        render();
+    }
+
+    document.getElementById("noteInput").addEventListener("blur", saveNote);
+    document.getElementById("noteInput").addEventListener("keydown", e => {
+        if (e.ctrlKey && e.key === "Enter") saveNote();
+    });
+
+    // 3. Inicializar a interface
+    render();
+</script>
